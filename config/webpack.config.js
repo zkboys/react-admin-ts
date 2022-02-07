@@ -346,6 +346,17 @@ module.exports = function(webpackEnv) {
         module: {
             strictExportPresence: true,
             rules: [
+                {
+                    test: path.join(paths.appSrc, 'pages', 'page-configs.ts'),
+                    enforce: 'pre',
+                    use: {
+                        loader: require.resolve('@ra-lib/config-loader'),
+                        options: {
+                            pagesPath: path.join(paths.appSrc, 'pages'),
+                        },
+                    },
+                    include: paths.appSrc,
+                },
                 // Handle node_modules packages that contain sourcemaps
                 shouldUseSourceMap && {
                     enforce: 'pre',
@@ -526,7 +537,13 @@ module.exports = function(webpackEnv) {
                                 },
                                 'less-loader',
                                 {
+                                    sourceMap: isEnvProduction
+                                        ? shouldUseSourceMap
+                                        : isEnvDevelopment,
                                     lessOptions: {
+                                        sourceMap: isEnvProduction
+                                            ? shouldUseSourceMap
+                                            : isEnvDevelopment,
                                         modifyVars,
                                         javascriptEnabled: true,
                                     },
@@ -555,7 +572,13 @@ module.exports = function(webpackEnv) {
                                 },
                                 'less-loader',
                                 {
+                                    sourceMap: isEnvProduction
+                                        ? shouldUseSourceMap
+                                        : isEnvDevelopment,
                                     lessOptions: {
+                                        sourceMap: isEnvProduction
+                                            ? shouldUseSourceMap
+                                            : isEnvDevelopment,
                                         modifyVars,
                                         javascriptEnabled: true,
                                     },
