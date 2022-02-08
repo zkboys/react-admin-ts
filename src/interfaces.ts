@@ -2,7 +2,8 @@ import { methodOptions } from "@ra-lib/ajax/es";
 
 export type { LAYOUT_TYPE } from '@ra-lib/admin';
 
-export type loginUser = {
+/** 当前登录用户 */
+export type LoginUser = {
     id: any;
     name: string;
     token?: string;
@@ -10,16 +11,15 @@ export type loginUser = {
     [key: string]: any;
 }
 
-
-export type menu = {
+/** 系统菜单  */
+export type Menu = {
     id: any;
     text: string;
     [key: string]: any;
 }
 
-
 /** 配置 */
-export type config = {
+export type Config = {
     /** node 运行环境 */
     NODE_ENV?: string;
     /** 运行环境 */
@@ -59,8 +59,8 @@ export type config = {
     /** 静态文件地址前缀，用来配置cdn等 */
     PUBLIC_URL?: string;
 }
-
-export type hocConfig = {
+/** config高阶组件 */
+export type HocConfig = {
     /** 是否需要登录*/
     auth?: boolean;
     /** props是否注入ajax */
@@ -109,7 +109,8 @@ export type hocConfig = {
     pageOtherHeight: number,
 }
 
-export type ajax = {
+/** ajax 对象 */
+export type Ajax = {
     get<T>(url: string, data?: any, options?: methodOptions): Promise<T>;
     post<T>(url: string, data?: any, options?: methodOptions): Promise<T>;
     put<T>(url: string, data?: any, options?: methodOptions): Promise<T>;
@@ -118,18 +119,55 @@ export type ajax = {
     download<T>(url: string, data?: any, options?: methodOptions): Promise<T>;
 }
 
-// 子应用
-export interface subApp {
-    // 应用名称
+export type AjaxResult<T> = {
+    data?: T,
+    run?: any,
+    error?: any,
+    loading?: boolean
+};
+
+/** ajax hooks */
+export type AjaxHook = {
+    useGet<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+    usePost<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+    usePut<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+    useDel<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+    usePatch<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+    useDownload<T>(url: string, data?: any, refreshDeps?: any, options?: any): AjaxResult<T>;
+}
+
+/** 被config高阶组件包裹的组件props */
+export type ConfigProps = {
+    ajax: AjaxHook & Ajax,
+    query?: any,
+    action?: any,
+    [key: string]: any,
+}
+
+/** 子应用 */
+export interface SubApp {
+    /** 应用名称 */
     name?: string;
-    // 应用标题
+    /** 应用标题 */
     title?: string;
-    // 应用入口
+    /** 应用入口 */
     entry?: string;
-    // 子应用容器
+    /** 子应用容器 */
     container?: string;
-    // 子应用激活规则
+    /** 子应用激活规则 */
     activeRule?: string;
-    // 子应用额外属性
+    /** 子应用额外属性 */
     props?: any;
 }
+
+export type Option = {
+    label: any,
+    value: any,
+    [key: string]: any,
+}
+
+/** options */
+export type Options = {
+    getTag?: any,
+    getLabel?: any,
+} & Array<Option>;

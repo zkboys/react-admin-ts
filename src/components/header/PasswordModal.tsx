@@ -1,16 +1,14 @@
 import { Form } from 'antd';
 import { ModalContent, FormItem } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
-import { ajax } from 'src/interfaces';
+import { ConfigProps } from 'src/interfaces';
 
 type Props = {
     /** 确定事件 */
     onOk: () => void;
     /** 取消事件 */
     onCancel: () => void;
-    /** ajax对象 */
-    ajax?: ajax;
-}
+} & ConfigProps;
 
 export default config({
     modal: {
@@ -22,7 +20,6 @@ export default config({
 
     function handleSubmit(values: any) {
         alert('TODO 接口对接');
-        console.log(props.ajax);
         onOk();
     }
 
@@ -43,8 +40,8 @@ export default config({
                     required
                     dependencies={[ 'password' ]}
                     rules={[
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
+                        ({ getFieldValue }: any) => ({
+                            validator(_: any, value: any) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
                                 }

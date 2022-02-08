@@ -8,7 +8,7 @@ import {
 } from '@ra-lib/admin';
 import { isNoAuthPage } from 'src/commons';
 import { IS_SUB } from 'src/config';
-import { subApp } from "src/interfaces";
+import { SubApp } from "src/interfaces";
 
 /**
  * 获取菜单
@@ -99,7 +99,7 @@ export async function getPermissions(): Promise<string[]> {
 /**
  * 获取子应用配置
  */
-export async function getSubApps(): Promise<subApp[]> {
+export async function getSubApps(): Promise<SubApp[]> {
     // 从菜单数据中获取需要注册的乾坤子项目
     const menuTreeData = (await getMenus()) || [];
 
@@ -111,7 +111,7 @@ export async function getSubApps(): Promise<subApp[]> {
             token: loginUser?.token,
         },
     };
-    let result: subApp[] = [];
+    let result: SubApp[] = [];
     const loop = (nodes: menu[]) =>
         nodes.forEach((node) => {
             const { _target, children } = node;

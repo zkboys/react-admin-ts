@@ -83,7 +83,6 @@ export default config({
         <div className={s.root}>
             <Helmet title="欢迎登录"/>
             <div className={s.logo}>
-                {/* @ts-ignore */}
                 <Logo/>
             </div>
             <div className={s.box}>
@@ -96,7 +95,6 @@ export default config({
                             name="account"
                             allowClear
                             autoFocus
-                            // @ts-ignore
                             prefix={<UserOutlined/>}
                             placeholder="请输入用户名"
                             rules={[ { required: true, message: '请输入用户名！' } ]}
@@ -106,7 +104,6 @@ export default config({
                         <FormItem
                             type="password"
                             name="password"
-                            // @ts-ignore
                             prefix={<LockOutlined/>}
                             placeholder="请输入密码"
                             rules={[ { required: true, message: '请输入密码！' } ]}
@@ -120,12 +117,11 @@ export default config({
                                     loading={login.loading}
                                     type="primary"
                                     htmlType="submit"
-                                    // @ts-ignore
                                     disabled={
                                         // 用户没有操作过，或者没有setFieldsValue
                                         !form.isFieldsTouched(true) ||
                                         // 表单中存在错误
-                                        form.getFieldsError().filter(({ errors }) => errors.length).length
+                                        !!form.getFieldsError().filter(({ errors }) => errors.length).length
                                     }
                                 >
                                     登录

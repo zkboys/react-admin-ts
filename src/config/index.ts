@@ -36,13 +36,13 @@ export const RUN_ENV = process.env.REACT_APP_RUN_ENV || NODE_ENV;
 export const CONFIG_ENV = process.env.REACT_APP_CONFIG_ENV || NODE_ENV;
 // 应用名称
 export const APP_NAME = c('APP_NAME', 'React Admin');
-// ajax 请求前缀
+// Ajax 请求前缀
 // 开发环境 或者 测试环境使用 localStorage中存储的前缀
 export const SHOW_PROXY = NODE_ENV === 'development' || window.location.hostname === '172.16.143.44';
 export const AJAX_PREFIX = SHOW_PROXY
     ? window.localStorage.getItem('AJAX_PREFIX') || '/api'
     : c('AJAX_PREFIX', isQianKun ? `${isQianKunPublicPath}api` : '/api');
-// ajax 超时时间
+// Ajax 超时时间
 export const AJAX_TIMEOUT = c('AJAX_TIMEOUT', 1000 * 60, Number);
 // config-hoc 配置存储key
 export const CONFIG_HOC_STORAGE_KEY = 'CONFIG_HOC_STORAGE_KEY';

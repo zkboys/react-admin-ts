@@ -4,10 +4,11 @@ import { PageContent, QueryBar, FormItem, Table, Pagination, Operator, ToolBar }
 import config from 'src/commons/config-hoc';
 import options from 'src/options';
 import EditModal from './EditModal';
+import { ConfigProps } from "src/interfaces";
 
 export default config({
     path: '/users',
-})(function User(props: any) {
+})(function User(props: ConfigProps) {
     const [ loading, setLoading ] = useState(false);
     const [ pageNum, setPageNum ] = useState(1);
     const [ pageSize, setPageSize ] = useState(20);
@@ -30,11 +31,9 @@ export default config({
     }, [ form ]);
 
     // 获取列表
-    // @ts-ignore
-    const { data: { dataSource, total } = {} } = props.ajax.useGet('/user/queryUsersByPage', params, [ params ], {
+    const { data: { dataSource = [], total = 0 } = {} } = props.ajax.useGet('/user/queryUsersByPage', params, [ params ], {
         setLoading,
-        // @ts-ignore
-        formatResult: (res) => {
+        formatResult: (res: any) => {
             return {
                 dataSource: res?.content || [],
                 total: res?.totalElements || 0,
@@ -44,31 +43,32 @@ export default config({
 
     // 删除
     const { run: deleteRecord } = props.ajax.useDel('/user/:id', null, { setLoading, successTip: '删除成功！' });
-
     const columns = [
         { title: '账号', dataIndex: 'account' },
         { title: '姓名', dataIndex: 'name' },
-        // @ts-ignore
-        { title: '启用', dataIndex: 'enabled', render: (value) => options.enabled.getTag(!!value) },
+        { title: '启用', dataIndex: 'enabled', render: (value: any) => options.enabled.getTag(!!value) },
         { title: '手机号', dataIndex: 'mobile' },
         { title: '邮箱', dataIndex: 'email' },
         {
             title: '操作',
             key: 'operator',
             width: 250,
-            // @ts-ignore
-            render: (value, record) => {
+            render: (value: any, record: any) => {
                 const { id, name } = record;
                 const items = [
                     {
                         label: '查看',
-                        // @ts-ignore
-                        onClick: () => setRecord({ ...record, isDetail: true }) || setVisible(true),
+                        onClick: () => {
+                            setRecord({ ...record, isDetail: true });
+                            setVisible(true);
+                        },
                     },
                     {
                         label: '修改',
-                        // @ts-ignore
-                        onClick: () => setRecord(record) || setVisible(true),
+                        onClick: () => {
+                            setRecord(record);
+                            setVisible(true);
+                        },
                     },
                     {
                         label: '删除',
@@ -79,7 +79,6 @@ export default config({
                         },
                     },
                 ];
-                // @ts-ignore
                 return <Operator items={items}/>;
             },
         },
@@ -106,8 +105,10 @@ export default config({
                     layout="inline"
                     form={form}
                     initialValues={{ position: '01' }}
-                    // @ts-ignore
-                    onFinish={(values) => setPageNum(1) || setConditions(values)}
+                    onFinish={(values) => {
+                        setPageNum(1);
+                        setConditions(values);
+                    }}
                 >
                     <FormItem {...queryItem} label="账号" name="account"/>
                     <FormItem {...queryItem} label="姓名" name="name"/>
@@ -133,8 +134,13 @@ export default config({
                 </Form>
             </QueryBar>
             <ToolBar>
-                {/* @ts-ignore */}
-                <Button type="primary" onClick={() => setRecord(null) || setVisible(true)}>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setRecord(null);
+                        setVisible(true);
+                    }}
+                >
                     添加
                 </Button>
             </ToolBar>
@@ -152,15 +158,19 @@ export default config({
                 pageNum={pageNum}
                 pageSize={pageSize}
                 onPageNumChange={setPageNum}
-                // @ts-ignore
-                onPageSizeChange={(pageSize) => setPageNum(1) || setPageSize(pageSize)}
+                onPageSizeChange={(pageSize) => {
+                    setPageNum(1);
+                    setPageSize(pageSize);
+                }}
             />
             <EditModal
                 visible={visible}
                 record={record}
                 isEdit={!!record}
-                // @ts-ignore
-                onOk={() => setVisible(false) || refreshSearch()}
+                onOk={() => {
+                    setVisible(false);
+                    refreshSearch();
+                }}
                 onCancel={() => setVisible(false)}
             />
         </PageContent>

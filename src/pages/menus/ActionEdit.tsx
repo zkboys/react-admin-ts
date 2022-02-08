@@ -4,8 +4,9 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { FormItem, Content } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
 import styles from './style.module.less';
+import { ConfigProps } from "src/interfaces";
 
-export default config()(function ActionEdit(props: any) {
+export default config()(function ActionEdit(props: ConfigProps) {
     const [ form ] = Form.useForm();
     const { isAdd, selectedMenu, onSubmit, onValuesChange } = props;
     const [ loading, setLoading ] = useState(false);

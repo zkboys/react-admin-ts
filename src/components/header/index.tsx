@@ -7,12 +7,12 @@ import config from 'src/commons/config-hoc';
 import { toLogin } from 'src/commons';
 import PasswordModal from './PasswordModal';
 import { Proxy } from 'src/components';
-import { loginUser } from 'src/interfaces';
+import { LoginUser } from 'src/interfaces';
 import s from './style.module.less';
 
 type Props = {
     /** 当前登录用户 */
-    loginUser?: loginUser;
+    loginUser?: LoginUser;
 }
 
 export default config({
@@ -23,7 +23,7 @@ export default config({
 
     async function handleLogout() {
         try {
-            // await props.ajax.post('/logout', null, {errorTip: false});
+            // await props.Ajax.post('/logout', null, {errorTip: false});
             alert('TODO 退出登录接口！');
         } finally {
             // 无论退出成功失败，都跳转登录页面
@@ -43,7 +43,7 @@ export default config({
         </Menu>
     );
 
-    const { avatar, name = '' } = loginUser as loginUser;
+    const { avatar, name = '' } = loginUser as LoginUser;
 
     return (
         <Space

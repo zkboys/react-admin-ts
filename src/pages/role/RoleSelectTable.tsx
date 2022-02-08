@@ -10,6 +10,9 @@ const WithCheckboxTable = renderTableCheckbox(Table);
 @config()
 export default class RoleSelectTable extends Component {
     static propTypes = {
+        fitHeight: PropTypes.bool,
+        otherHeight: PropTypes.number,
+        getCheckboxProps: PropTypes.func,
         value: PropTypes.array, // 选中的节点
         onChange: PropTypes.func, // 选择节点时，触发
         fullValue: PropTypes.bool, // value是否是角色全部数据

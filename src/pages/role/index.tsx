@@ -29,16 +29,13 @@ export default config({
     // 使用现有查询条件，重新发起请求
     const refreshSearch = useCallback(() => setConditions(form.getFieldsValue()), [ form ]);
     // 获取列表
-    // @ts-ignore
-    const { data: { dataSource, total } = {} } = props.ajax.useGet('/role/queryRoleByPage', params, [ params ], {
+    const { data: { dataSource = [], total = 0 } = {} } = props.ajax.useGet('/role/queryRoleByPage', params, [ params ], {
         setLoading,
         // mountFire: false, // 初始化不查询
-        // @ts-ignore
-        formatResult: (res) => {
+        formatResult: (res: any) => {
             return {
                 // 只有自定义角色显示
-                // @ts-ignore
-                dataSource: (res?.content || []).filter((item) => item.type === 3),
+                dataSource: (res?.content || []).filter((item: any) => item.type === 3),
                 total: res?.totalElements || 0,
             };
         },
@@ -49,21 +46,21 @@ export default config({
 
     let columns = [
         { title: '角色名称', dataIndex: 'name' },
-        // @ts-ignore
-        { title: '启用', dataIndex: 'enabled', render: (value) => options.enabled.getTag(!!value) },
+        { title: '启用', dataIndex: 'enabled', render: (value: any) => options.enabled.getTag(!!value) },
         { title: '备注', dataIndex: 'remark' },
         {
             title: '操作',
             dataIndex: 'operator',
             width: 100,
-            // @ts-ignore
-            render: (value, record) => {
+            render: (value: any, record: any) => {
                 const { id, name } = record;
                 const items = [
                     {
                         label: '编辑',
-                        // @ts-ignore
-                        onClick: () => setRecord(record) || setVisible(true),
+                        onClick: () => {
+                            setRecord(record);
+                            setVisible(true);
+                        },
                     },
                     {
                         label: '删除',
@@ -74,7 +71,6 @@ export default config({
                         },
                     },
                 ];
-                // @ts-ignore
                 return <Operator items={items}/>;
             },
         },
@@ -121,8 +117,13 @@ export default config({
                 </Form>
             </QueryBar>
             <ToolBar>
-                {/* @ts-ignore */}
-                <Button type="primary" onClick={() => setRecord(null) || setVisible(true)}>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setRecord(null);
+                        setVisible(true);
+                    }}
+                >
                     添加
                 </Button>
             </ToolBar>
@@ -132,15 +133,19 @@ export default config({
                 pageNum={pageNum}
                 pageSize={pageSize}
                 onPageNumChange={setPageNum}
-                // @ts-ignore
-                onPageSizeChange={(pageSize) => setPageNum(1) || setPageSize(pageSize)}
+                onPageSizeChange={(pageSize) => {
+                    setPageNum(1);
+                    setPageSize(pageSize);
+                }}
             />
             <EditModal
                 visible={visible}
                 isEdit={!!record}
                 record={record}
-                // @ts-ignore
-                onOk={() => setVisible(false) || refreshSearch()}
+                onOk={() => {
+                    setVisible(false);
+                    refreshSearch();
+                }}
                 onCancel={() => setVisible(false)}
             />
         </PageContent>

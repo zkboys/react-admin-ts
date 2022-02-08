@@ -112,6 +112,9 @@ module.exports = function(webpackEnv) {
 
     const shouldUseReactRefresh = env.raw.FAST_REFRESH;
 
+    // 是否生成sourceMap
+    const sourceMap = isEnvProduction ? shouldUseSourceMap : isEnvDevelopment;
+
     // common function to get style loaders
     const getStyleLoaders = (cssOptions, preProcessor, preProcessorOptions = {}) => {
         const loaders = [
@@ -170,7 +173,7 @@ module.exports = function(webpackEnv) {
                                 ],
                             ],
                     },
-                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                    sourceMap,
                 },
             },
         ].filter(Boolean);
@@ -179,7 +182,7 @@ module.exports = function(webpackEnv) {
                 {
                     loader: require.resolve('resolve-url-loader'),
                     options: {
-                        sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                        sourceMap: true,
                         root: paths.appSrc,
                     },
                 },
@@ -188,7 +191,7 @@ module.exports = function(webpackEnv) {
                 {
                     loader: require.resolve(preProcessor),
                     options: {
-                        sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                        sourceMap: true,
                         ...preProcessorOptions,
                     },
                 },
@@ -502,9 +505,7 @@ module.exports = function(webpackEnv) {
                             exclude: cssModuleRegex,
                             use: getStyleLoaders({
                                 importLoaders: 1,
-                                sourceMap: isEnvProduction
-                                    ? shouldUseSourceMap
-                                    : isEnvDevelopment,
+                                sourceMap,
                                 modules: {
                                     mode: 'icss',
                                 },
@@ -521,9 +522,7 @@ module.exports = function(webpackEnv) {
                             test: cssModuleRegex,
                             use: getStyleLoaders({
                                 importLoaders: 1,
-                                sourceMap: isEnvProduction
-                                    ? shouldUseSourceMap
-                                    : isEnvDevelopment,
+                                sourceMap,
                                 modules: {
                                     mode: 'local',
                                     getLocalIdent: getCSSModuleLocalIdent,
@@ -539,9 +538,7 @@ module.exports = function(webpackEnv) {
                             use: getStyleLoaders(
                                 {
                                     importLoaders: 3,
-                                    sourceMap: isEnvProduction
-                                        ? shouldUseSourceMap
-                                        : isEnvDevelopment,
+                                    sourceMap,
                                     modules: {
                                         mode: 'icss',
                                     },
@@ -567,9 +564,7 @@ module.exports = function(webpackEnv) {
                             use: getStyleLoaders(
                                 {
                                     importLoaders: 3,
-                                    sourceMap: isEnvProduction
-                                        ? shouldUseSourceMap
-                                        : isEnvDevelopment,
+                                    sourceMap,
                                     modules: {
                                         mode: 'local',
                                         getLocalIdent: getCSSModuleLocalIdent,
@@ -725,9 +720,7 @@ module.exports = function(webpackEnv) {
                     }),
                     configOverwrite: {
                         compilerOptions: {
-                            sourceMap: isEnvProduction
-                                ? shouldUseSourceMap
-                                : isEnvDevelopment,
+                            sourceMap,
                             skipLibCheck: true,
                             inlineSourceMap: false,
                             declarationMap: false,
@@ -792,5 +785,7 @@ module.exports = function(webpackEnv) {
         // Turn off performance processing because we utilize
         // our own hints via the FileSizeReporter
         performance: false,
+        // 简化控制台输出
+        stats: 'errors-only',
     };
 };

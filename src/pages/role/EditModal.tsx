@@ -1,32 +1,29 @@
 import { useCallback, useState } from 'react';
-import { Card, Row, Col, Form } from 'antd';
+import { Card, Row, Col, Form, FormInstance } from 'antd';
 import { ModalContent, FormItem, Content, useDebounceValidator, useOptions } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
 import { WITH_SYSTEMS } from 'src/config';
 import MenuTableSelect from 'src/pages/menus/MenuTableSelect';
 import options from 'src/options';
+import { ConfigProps } from "src/interfaces";
 
 export default config({
     modal: {
-        // @ts-ignore
-        title: (props) => (props.isEdit ? '编辑角色' : '创建角色'),
+        title: (props: any) => (props.isEdit ? '编辑角色' : '创建角色'),
         width: '70%',
         top: 50,
     },
-    // @ts-ignore
-})(function Edit(props) {
+})(function Edit(props: ConfigProps) {
     const { record, isEdit, onOk } = props;
-    const [loading, setLoading] = useState(false);
-    const [form] = Form.useForm();
-    // @ts-ignore
-    const [systemOptions] = useOptions(options.system);
+    const [ loading, setLoading ] = useState(false);
+    const [ form ] = Form.useForm();
+    const [ systemOptions ] = useOptions(options.system);
 
     // 获取详情 data为表单回显数据
     props.ajax.useGet('/role/getRoleDetailById', { id: record?.id }, [], {
         setLoading,
         mountFire: isEdit, // 组件didMount时，只有编辑时才触发请求
-        // @ts-ignore
-        formatResult: (res) => {
+        formatResult: (res: any) => {
             if (!res) return;
             const values = {
                 ...res,
@@ -57,12 +54,11 @@ export default config({
 
             onOk();
         },
-        [isEdit, updateRole, saveRole, onOk],
+        [ isEdit, updateRole, saveRole, onOk ],
     );
 
     // 系统内，角色名称不可重复
-    // @ts-ignore
-    const checkName = useDebounceValidator(async (rule, value) => {
+    const checkName = useDebounceValidator(async (rule: any, value: any) => {
         if (!value) return;
 
         const systemId = form.getFieldValue('systemId');
@@ -88,7 +84,7 @@ export default config({
                 cancelText="重置"
                 onCancel={() => form.resetFields()}
             >
-                {isEdit ? <FormItem hidden name="id" /> : null}
+                {isEdit ? <FormItem hidden name="id"/> : null}
 
                 <Row gutter={8}>
                     <Col {...colLayout}>
@@ -114,7 +110,7 @@ export default config({
                                     required
                                     noSpace
                                     maxLength={50}
-                                    rules={[{ validator: checkName }]}
+                                    rules={[ { validator: checkName } ]}
                                 />
                                 <FormItem
                                     {...layout}
@@ -125,15 +121,14 @@ export default config({
                                     unCheckedChildren="禁"
                                     required
                                 />
-                                <FormItem {...layout} type="textarea" label="备注" name="remark" maxLength={250} />
+                                <FormItem {...layout} type="textarea" label="备注" name="remark" maxLength={250}/>
                             </Content>
                         </Card>
                     </Col>
                     <Col {...colLayout}>
                         <Card title="权限配置" bodyStyle={{ padding: 0 }}>
                             <FormItem shouldUpdate noStyle>
-                                {/* @ts-ignore */}
-                                {({ getFieldValue }) => {
+                                {({ getFieldValue }: FormInstance) => {
                                     const systemId = getFieldValue('systemId');
                                     return (
                                         <FormItem {...layout} name="menuIds">

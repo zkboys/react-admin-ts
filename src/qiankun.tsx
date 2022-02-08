@@ -5,7 +5,7 @@ import { SubError } from './components';
 import { CONFIG_HOC } from './config';
 import { getSubApps } from 'src/api';
 import App from './App';
-import { subApp } from 'src/interfaces';
+import { SubApp } from 'src/interfaces';
 
 /**
  * 获取当前激活子应用
@@ -16,7 +16,7 @@ export async function getCurrentActiveSubApp(pathname = window.location.pathname
     const name = `${pathname.split('/')[1]}`;
     const subApps = await getSubApps();
 
-    return subApps.find((item: subApp) => item.name === name);
+    return subApps.find((item: SubApp) => item.name === name);
 }
 
 /**
@@ -25,7 +25,7 @@ export async function getCurrentActiveSubApp(pathname = window.location.pathname
  * @param pathname
  * @returns {*}
  */
-export function isActiveApp(app: subApp, pathname = window.location.pathname) {
+export function isActiveApp(app: SubApp, pathname = window.location.pathname) {
     return pathname.startsWith(`/${app.name}`);
 }
 
@@ -36,7 +36,7 @@ export function isActiveApp(app: subApp, pathname = window.location.pathname) {
 export async function getAppByName(name: string) {
     const apps = await getSubApps();
 
-    return apps.find((item: subApp) => item.name === name);
+    return apps.find((item: SubApp) => item.name === name);
 }
 
 export default async function() {

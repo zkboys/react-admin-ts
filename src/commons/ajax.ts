@@ -14,13 +14,13 @@ const ajax = new Ajax({
 
 // 请求拦截
 ajax.instance.interceptors.request.use(
-    (cfg) => {
+    (cfg: any) => {
         if (!cfg.headers) cfg.headers = {};
         // 这里每次请求都会动态获取，放到创建实例中，只加载一次，有时候会出问题。
         cfg.headers['auth-token'] = getToken();
         return cfg;
     },
-    (error) => {
+    (error: any) => {
         // Do something with request error
         return Promise.reject(error);
     },
@@ -28,7 +28,7 @@ ajax.instance.interceptors.request.use(
 
 // 响应拦截
 ajax.instance.interceptors.response.use(
-    (res) => {
+    (res: any) => {
         // Do something before response
 
         // 后端自定义失败，前端直接抛出，走handleError逻辑
@@ -36,7 +36,7 @@ ajax.instance.interceptors.response.use(
 
         return res;
     },
-    (error) => {
+    (error: any) => {
         // Do something with response error
         return Promise.reject(error);
     },

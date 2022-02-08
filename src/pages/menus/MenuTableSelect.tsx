@@ -3,20 +3,20 @@ import { Input, Button } from 'antd';
 import { convertToTree, filterTree, Table, renderTableCheckbox } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
 import options from 'src/options';
+import { ConfigProps } from "src/interfaces";
 
-// @ts-ignore
 const menuTargetOptions = options.menuTarget;
 
 const WithCheckboxTable = renderTableCheckbox(Table);
 
-export default config()(function MenuTableSelect(props: any) {
+export default config()(function MenuTableSelect(props: ConfigProps) {
     const { menus, value, onChange, topId, getCheckboxProps, ...others } = props;
 
     const [ loading, setLoading ] = useState(false);
     const [ dataSource, setDataSource ] = useState([]);
     const [ menuTreeData, setMenuTreeData ] = useState([]);
     const [ allMenuKeys, setAllMenuKeys ] = useState([]);
-    const [ expandedRowKeys, setExpandedRowKeys ] = useState([]);
+    const [ expandedRowKeys, setExpandedRowKeys ] = useState<string[]>([]);
     const [ expandedAll, setExpandedAll ] = useState(true);
 
     const timerRef = useRef(0);
@@ -28,13 +28,11 @@ export default config()(function MenuTableSelect(props: any) {
             dataIndex: 'type',
             key: 'type',
             width: 100,
-            // @ts-ignore
-            render: (value, record) => {
+            render: (value: any, record: any) => {
                 if (value === 2) return '功能权限码';
 
                 const { target } = record;
 
-                // @ts-ignore
                 return menuTargetOptions.find((item) => item.value === target)?.label || '-';
             },
         },
@@ -49,18 +47,16 @@ export default config()(function MenuTableSelect(props: any) {
 
     useEffect(() => {
         if (!topId) return;
-        // @ts-ignore
-        const dataSource = [ ...menuTreeData ].filter((item) => item.id === topId);
+        const dataSource = [ ...menuTreeData ].filter((item: any) => item.id === topId);
 
         setDataSource(dataSource);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ menuTreeData, topId ]);
 
     const fetchMenus = useCallback(async () => {
-        const res = await props.ajax.get('/menu/queryMenus', { enabled: true });
+        const res: any = await props.ajax.get('/menu/queryMenus', { enabled: true });
 
-        // @ts-ignore
-        return (res || []).map((item) => {
+        return (res || []).map((item: any) => {
             return {
                 ...item,
             };
@@ -72,8 +68,7 @@ export default config()(function MenuTableSelect(props: any) {
 
         try {
             const menusRes = menus || (await fetchMenus());
-            // @ts-ignore
-            const allMenuKeys = menusRes.map((item) => item.id);
+            const allMenuKeys = menusRes.map((item: any) => item.id);
             const menuTreeData = convertToTree(menusRes);
 
             // 默认展开全部
@@ -81,7 +76,6 @@ export default config()(function MenuTableSelect(props: any) {
             setDataSource(menuTreeData);
             setMenuTreeData(menuTreeData);
             setAllMenuKeys(allMenuKeys);
-            // @ts-ignore
             setExpandedRowKeys(expandedRowKeys);
 
             setLoading(false);
@@ -138,8 +132,7 @@ export default config()(function MenuTableSelect(props: any) {
             <WithCheckboxTable
                 expandable={{
                     expandedRowKeys: expandedRowKeys,
-                    // @ts-ignore
-                    onExpandedRowsChange: (expandedRowKeys) => setExpandedRowKeys(expandedRowKeys),
+                    onExpandedRowsChange: (expandedRowKeys: string[]) => setExpandedRowKeys(expandedRowKeys),
                 }}
                 rowSelection={{
                     getCheckboxProps,

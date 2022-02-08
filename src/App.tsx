@@ -46,12 +46,12 @@ export default function App(props: any) {
                 if (!loginUser) {
                     // 嵌入iframe等方式，没有经过登录页面，没有设置loginUser，需要请求loginUser
                     // 发请求，获取loginUser
-                    // loginUser = await api.getLoginUser();
+                    // LoginUser = await api.getLoginUser();
                     //
                     // const {token} = queryParse();
-                    // if (token) loginUser.token = token;
+                    // if (token) LoginUser.token = token;
                     //
-                    // setLoginUser(loginUser);
+                    // setLoginUser(LoginUser);
 
                     return setLoading(false);
                 }

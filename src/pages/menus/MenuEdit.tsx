@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Button, Form, Modal, Space, Tabs, Popconfirm } from 'antd';
+import { Button, Form, Modal, Space, Tabs, Popconfirm, FormInstance } from 'antd';
 import json5 from 'json5';
 import { FormItem, Content, useHeight, useDebounceValidator } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
@@ -15,10 +15,10 @@ const TabPane = Tabs.TabPane;
 export default config()(function MenuEdit(props: any) {
     const { isAdd, selectedMenu, onSubmit, onValuesChange } = props;
 
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const [addTabKey, setAddTabKey] = useState('1');
-    const [textAreaHeight] = useHeight(null, 285);
+    const [ form ] = Form.useForm();
+    const [ loading, setLoading ] = useState(false);
+    const [ addTabKey, setAddTabKey ] = useState('1');
+    const [ textAreaHeight ] = useHeight(null, 285);
     const contentRef = useRef(null);
 
     const hasSelectedMenu = selectedMenu && Object.keys(selectedMenu).length;
@@ -50,7 +50,7 @@ export default config()(function MenuEdit(props: any) {
             };
 
         form.setFieldsValue(initialValues);
-    }, [form, isAdd, isAddTop, isAddSub, selectedMenu]);
+    }, [ form, isAdd, isAddTop, isAddSub, selectedMenu ]);
 
     const handleSubmit = useCallback(
         async (values) => {
@@ -101,7 +101,7 @@ export default config()(function MenuEdit(props: any) {
                 onSubmit && onSubmit({ ...params, isUpdate: true });
             }
         },
-        [addTabKey, branchSaveMenu, isAdd, isAddSub, isAddTop, loading, onSubmit, saveMenu, saveRole, updateMenu],
+        [ addTabKey, branchSaveMenu, isAdd, isAddSub, isAddTop, loading, onSubmit, saveMenu, saveRole, updateMenu ],
     );
 
     // @ts-ignore
@@ -122,7 +122,7 @@ export default config()(function MenuEdit(props: any) {
         await deleteMenu({ id });
 
         onSubmit && onSubmit({ id, isDelete: true });
-    }, [deleteMenu, onSubmit, selectedMenu?.id]);
+    }, [ deleteMenu, onSubmit, selectedMenu?.id ]);
 
     const layout = {
         labelCol: { flex: '100px' },
@@ -141,12 +141,12 @@ export default config()(function MenuEdit(props: any) {
             <Content ref={contentRef} loading={loading} className={styles.content}>
                 {isAddSub ? (
                     <Tabs activeKey={addTabKey} onChange={(key) => setAddTabKey(key)}>
-                        <TabPane key="1" tab="单个添加" />
-                        <TabPane key="2" tab="批量添加" />
+                        <TabPane key="1" tab="单个添加"/>
+                        <TabPane key="2" tab="批量添加"/>
                     </Tabs>
                 ) : null}
-                <FormItem name="id" hidden />
-                <FormItem name="parentId" hidden />
+                <FormItem name="id" hidden/>
+                <FormItem name="parentId" hidden/>
                 {addTabKey === '1' ? (
                     <>
                         <FormItem
@@ -160,9 +160,9 @@ export default config()(function MenuEdit(props: any) {
                             // @ts-ignore
                             getPopupContainer={() => contentRef.current}
                         />
-                        <FormItem {...layout} label="标题" name="title" required tooltip="菜单标题" />
-                        <FormItem {...layout} type="number" label="排序" name="order" tooltip="降序，越大越靠前" />
-                        <FormItem {...layout} label="路径" name="path" tooltip="菜单路径或第三方网站地址" />
+                        <FormItem {...layout} label="标题" name="title" required tooltip="菜单标题"/>
+                        <FormItem {...layout} type="number" label="排序" name="order" tooltip="降序，越大越靠前"/>
+                        <FormItem {...layout} label="路径" name="path" tooltip="菜单路径或第三方网站地址"/>
                         <FormItem
                             {...layout}
                             type="switch"
@@ -173,8 +173,7 @@ export default config()(function MenuEdit(props: any) {
                             tooltip="是否启用"
                         />
                         <FormItem shouldUpdate noStyle>
-                            {/* @ts-ignore */}
-                            {({ getFieldValue }) => {
+                            {({ getFieldValue }: FormInstance) => {
                                 const target = getFieldValue('target');
                                 if (target === 'qiankun') {
                                     return (
@@ -200,7 +199,7 @@ export default config()(function MenuEdit(props: any) {
                                                 name="entry"
                                                 rules={[
                                                     {
-                                                        validator: (rule, value) => {
+                                                        validator: (rule: any, value: any) => {
                                                             if (value && !value.startsWith('http'))
                                                                 return Promise.reject('请输入正确的入口地址！');
                                                             return Promise.resolve();
@@ -232,7 +231,7 @@ export default config()(function MenuEdit(props: any) {
                         name="menus"
                         // @ts-ignore
                         rows={16}
-                        rules={[{ required: true, message: '请输入菜单数据！' }]}
+                        rules={[ { required: true, message: '请输入菜单数据！' } ]}
                         style={{ height: textAreaHeight }}
                         placeholder={`批量添加子菜单，结构如下：
 [

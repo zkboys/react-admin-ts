@@ -3,6 +3,7 @@ import { Form, Row, Col, Card, Button } from 'antd';
 import { ModalContent, FormItem, Content, validateRules, useDebounceValidator } from '@ra-lib/admin';
 import config from 'src/commons/config-hoc';
 import RoleSelectTable from 'src/pages/role/RoleSelectTable';
+import { ConfigProps } from "src/interfaces";
 
 export default config({
     modal: {
@@ -14,7 +15,7 @@ export default config({
         width: '70%',
         top: 50,
     },
-})(function Edit(props: any) {
+})(function Edit(props: ConfigProps) {
     const { record, isEdit, onOk, onCancel } = props;
     const [ loading, setLoading ] = useState(false);
     const [ form ] = Form.useForm();
@@ -28,8 +29,7 @@ export default config({
     props.ajax.useGet('/user/getUserById', params, [ params ], {
         mountFire: isEdit,
         setLoading,
-        // @ts-ignore
-        formatResult: (res) => {
+        formatResult: (res: any) => {
             if (!res) return;
             form.setFieldsValue(res);
         },
@@ -40,8 +40,7 @@ export default config({
 
     const handleSubmit = useCallback(
         async (values) => {
-            // @ts-ignore
-            const roleIds = values.roleIds?.filter((id) => !`${id}`.startsWith('systemId'));
+            const roleIds = values.roleIds?.filter((id: any) => !`${id}`.startsWith('systemId'));
             const params = {
                 ...values,
                 roleIds,
@@ -58,8 +57,7 @@ export default config({
         [ isEdit, update, save, onOk ],
     );
 
-    // @ts-ignore
-    const checkAccount = useDebounceValidator(async (rule, value) => {
+    const checkAccount = useDebounceValidator(async (rule: any, value: any) => {
         if (!value) return;
 
         const user = await fetchUserByAccount({ account: value });
@@ -117,7 +115,6 @@ export default config({
                                     {...layout}
                                     label="邮箱"
                                     name="email"
-                                    // @ts-ignore
                                     rules={[ validateRules.email() ]}
                                     required
                                     noSpace
@@ -136,8 +133,11 @@ export default config({
                     <Col {...colLayout}>
                         <Card title="角色配置" bodyStyle={{ padding: 0 }}>
                             <FormItem {...layout} name="roleIds">
-                                {/* @ts-ignore */}
-                                <RoleSelectTable fitHeight otherHeight={200} getCheckboxProps={() => ({ disabled })}/>
+                                <RoleSelectTable
+                                    fitHeight
+                                    otherHeight={200}
+                                    getCheckboxProps={() => ({ disabled })}
+                                />
                             </FormItem>
                         </Card>
                     </Col>

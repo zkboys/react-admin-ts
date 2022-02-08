@@ -21,10 +21,10 @@ export default {
 
         const list = await executeSql(
             `
-            select *
-            from roles ${where}
-            order by updatedAt desc
-            limit ? offset ?`,
+                select *
+                from roles ${where}
+                order by updatedAt desc
+                limit ? offset ?`,
             [pageSize, (pageNum - 1) * pageSize],
         );
 
@@ -121,7 +121,7 @@ export default {
 };
 
 async function addSystemName(list) {
-    const systemIds = list.map((item) => item.systemId).filter((item) => !!item);
+    const systemIds = list.map((item) => item.systemId).filter((item) => !!item && item !== 'undefined');
     if (systemIds && systemIds.length) {
         const systems = await executeSql(`
             select *

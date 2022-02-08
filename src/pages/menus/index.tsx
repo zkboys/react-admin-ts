@@ -7,14 +7,15 @@ import MenuEdit from './MenuEdit';
 import ActionEdit from './ActionEdit';
 import theme from 'src/theme.less';
 import s from './style.module.less';
+import { ConfigProps } from "src/interfaces";
 
 export default config({
     path: '/menus',
-})(function MenuManager(props: any) {
-    const [isAdd, setIsAdd] = useState(true);
-    const [selectedMenu, setSelectedMenu] = useState(null);
-    const [hasUnSaveMenu, setHasUnSaveMenu] = useState(false);
-    const [hasUnSaveAction, setHasUnSaveAction] = useState(false);
+})(function MenuManager(props: ConfigProps) {
+    const [ isAdd, setIsAdd ] = useState(true);
+    const [ selectedMenu, setSelectedMenu ] = useState();
+    const [ hasUnSaveMenu, setHasUnSaveMenu ] = useState(false);
+    const [ hasUnSaveAction, setHasUnSaveAction ] = useState(false);
     const {
         loading,
         data: menus = [],
@@ -48,21 +49,20 @@ export default config({
             if (showTip && hasUnSaveAction) await confirm('功能列表有未保存数据，是否放弃？');
             setHasUnSaveAction(false);
         },
-        [hasUnSaveMenu, hasUnSaveAction],
+        [ hasUnSaveMenu, hasUnSaveAction ],
     );
 
     const handleClick = useCallback(
         async ({ key }, showTip = true) => {
             await checkUnSave(showTip);
-            // @ts-ignore
-            const menuData = menus.find((item) => item.id === key);
+            const menuData = menus.find((item: any) => item.id === key);
             setSelectedMenu(menuData);
             setIsAdd(false);
         },
-        [checkUnSave, menus],
+        [ checkUnSave, menus ],
     );
 
-    const [menuItems, menuTreeData] = useMemo(() => {
+    const [ menuItems, menuTreeData ] = useMemo(() => {
         const menuTreeData = convertToTree(sort(menus, (a, b) => b.order - a.order));
         // @ts-ignore
         const loop = (nodes) =>
@@ -100,15 +100,15 @@ export default config({
                 );
             });
 
-        return [loop(menuTreeData), menuTreeData];
+        return [ loop(menuTreeData), menuTreeData ];
         // eslint-disable-next-line
-    }, [menus, selectedMenu, hasUnSaveMenu]);
+    }, [ menus, selectedMenu, hasUnSaveMenu ]);
 
     useEffect(() => {
         (async () => {
             await fetchMenus();
         })();
-    }, [fetchMenus]);
+    }, [ fetchMenus ]);
 
     const handleMenuSubmit = useCallback(
         async (data) => {
@@ -137,14 +137,14 @@ export default config({
                 }
             }
         },
-        [fetchMenus, handleClick, menuTreeData, selectedMenu],
+        [ fetchMenus, handleClick, menuTreeData, selectedMenu ],
     );
 
     const handleActionSubmit = useCallback(async () => {
         setHasUnSaveAction(false);
 
         await fetchMenus();
-    }, [fetchMenus]);
+    }, [ fetchMenus ]);
 
     return (
         <PageContent loading={loading} fitHeight className={s.menuRoot}>
@@ -155,7 +155,7 @@ export default config({
                         onClick={async () => {
                             await checkUnSave();
                             setIsAdd(true);
-                            setSelectedMenu(null);
+                            setSelectedMenu(undefined);
                         }}
                     >
                         {WITH_SYSTEMS ? '添加应用' : '添加顶级'}
@@ -177,13 +177,13 @@ export default config({
                             mode="inline"
                             selectable
                             // @ts-ignore
-                            selectedKeys={[selectedMenu?.id]}
+                            selectedKeys={[ selectedMenu?.id ]}
                             onClick={(info) => handleClick(info)}
                         >
                             {menuItems}
                         </Menu>
                     ) : (
-                        <Empty style={{ marginTop: 58 }} description="暂无数据" />
+                        <Empty style={{ marginTop: 58 }} description="暂无数据"/>
                     )}
                 </div>
             </div>

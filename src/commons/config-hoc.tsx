@@ -6,7 +6,7 @@ import {
     getQuery,
     getLoginUser,
 } from '@ra-lib/admin';
-import { loginUser } from 'src/interfaces';
+import { LoginUser } from 'src/interfaces';
 import { ajaxHoc } from 'src/commons/ajax';
 import { connect as reduxConnect } from 'src/models';
 import { CONFIG_HOC, IS_MOBILE } from 'src/config';
@@ -61,7 +61,7 @@ function commonHoc(options: configOptions) {
 
         const WithLayout = (props: any) => {
             // 默认添加属性到props中的属性
-            const extendProps: { query?: any, loginUser?: loginUser } = {};
+            const extendProps: { query?: any, loginUser?: LoginUser } = {};
             if (query !== false) extendProps.query = getQuery();
             if (loginUser !== false) extendProps.loginUser = getLoginUser();
 

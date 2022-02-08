@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { getCurrentActiveSubApp } from 'src/qiankun';
 import { isActiveApp, getContainerId } from '@ra-lib/admin';
 import { getSubApps } from 'src/api';
-import { subApp } from 'src/interfaces';
+import { SubApp } from 'src/interfaces';
 import config from 'src/commons/config-hoc';
 
 export default config()(function SubApp() {
-    const [ apps, setApps ] = useState<subApp[] | []>([]);
+    const [ apps, setApps ] = useState<SubApp[] | []>([]);
     const [ activeAppNames, setActiveAppNames ] = useState([]);
     useEffect(() => {
         (async () => {
