@@ -183,10 +183,12 @@ module.exports = function(webpackEnv) {
                         root: paths.appSrc,
                     },
                 },
+            );
+            loaders.push(
                 {
                     loader: require.resolve(preProcessor),
                     options: {
-                        sourceMap: true,
+                        sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
                         ...preProcessorOptions,
                     },
                 },
@@ -326,6 +328,15 @@ module.exports = function(webpackEnv) {
                     'scheduler/tracing': 'scheduler/tracing-profiling',
                 }),
                 ...(modules.webpackAliases || {}),
+                // 使所有的react 都访问主应用安装的包
+                react: path.join(paths.appNodeModules, 'react'),
+                antd: path.join(paths.appNodeModules, 'antd'),
+                moment: path.join(paths.appNodeModules, 'moment'),
+                'react-dom': path.join(paths.appNodeModules, 'react-dom'),
+                'react-redux': path.join(paths.appNodeModules, 'react-redux'),
+                'redux': path.join(paths.appNodeModules, 'redux'),
+                'react-router-dom': path.join(paths.appNodeModules, 'react-router-dom'),
+                'axios': path.join(paths.appNodeModules, 'axios'),
             },
             plugins: [
                 // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -333,14 +344,14 @@ module.exports = function(webpackEnv) {
                 // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
                 // please link the files into your node_modules/ and let module-resolution kick in.
                 // Make sure your source files are compiled, as they will not be processed in any way.
-                new ModuleScopePlugin(paths.appSrc, [
-                    paths.appPackageJson,
-                    reactRefreshRuntimeEntry,
-                    reactRefreshWebpackPluginRuntimeEntry,
-                    babelRuntimeEntry,
-                    babelRuntimeEntryHelpers,
-                    babelRuntimeRegenerator,
-                ]),
+                // new ModuleScopePlugin(paths.appSrc, [
+                //     paths.appPackageJson,
+                //     reactRefreshRuntimeEntry,
+                //     reactRefreshWebpackPluginRuntimeEntry,
+                //     babelRuntimeEntry,
+                //     babelRuntimeEntryHelpers,
+                //     babelRuntimeRegenerator,
+                // ]),
             ],
         },
         module: {
@@ -519,8 +530,8 @@ module.exports = function(webpackEnv) {
                                 },
                             }),
                         },
-                        // Opt-in support for SASS (using .less extensions).
-                        // By default we support SASS Modules with the
+                        // Opt-in support for LESS (using .less extensions).
+                        // By default we support LESS Modules with the
                         // extensions .module.less
                         {
                             test: lessRegex,
@@ -549,7 +560,7 @@ module.exports = function(webpackEnv) {
                             // See https://github.com/webpack/webpack/issues/6571
                             sideEffects: true,
                         },
-                        // Adds support for CSS Modules, but using SASS
+                        // Adds support for CSS Modules, but using LESS
                         // using the extension .module.less
                         {
                             test: lessModuleRegex,
