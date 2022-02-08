@@ -4,10 +4,11 @@ import {
     isLoginPage,
     formatMenus,
     getContainerId,
+    menu,
 } from '@ra-lib/admin';
 import { isNoAuthPage } from 'src/commons';
 import { IS_SUB } from 'src/config';
-import { subApp, menu } from "src/interfaces";
+import { subApp } from "src/interfaces";
 
 /**
  * 获取菜单

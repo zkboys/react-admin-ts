@@ -5,15 +5,13 @@ import { Provider } from 'react-redux';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import { ComponentProvider, Loading, getLoginUser, setLoginUser /*queryParse,*/ } from '@ra-lib/admin';
-import { Generator } from 'src/components';
+import { ComponentProvider, Loading, getLoginUser, setLoginUser /*queryParse,*/, menu } from '@ra-lib/admin';
 import { isNoAuthPage } from 'src/commons';
 import AppRouter from './router/AppRouter';
 import { APP_NAME, CONFIG_HOC, IS_MOBILE } from 'src/config';
 import { store } from 'src/models';
 import { saveCollectedMenu, getCollectedMenus, getMenus, getPermissions } from 'src/api';
 import theme from 'src/theme.less';
-import { menu } from 'src/interfaces';
 import './App.less';
 
 // 设置语言
@@ -98,7 +96,6 @@ export default function App(props: any) {
                     ) : (
                         <AppRouter menus={menus} collectedMenus={collectedMenus} onMenuCollect={handleMenuCollect}/>
                     )}
-                    {process.env.NODE_ENV === 'development' ? <Generator/> : null}
                 </ComponentProvider>
             </ConfigProvider>
         </Provider>

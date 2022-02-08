@@ -537,13 +537,7 @@ module.exports = function(webpackEnv) {
                                 },
                                 'less-loader',
                                 {
-                                    sourceMap: isEnvProduction
-                                        ? shouldUseSourceMap
-                                        : isEnvDevelopment,
                                     lessOptions: {
-                                        sourceMap: isEnvProduction
-                                            ? shouldUseSourceMap
-                                            : isEnvDevelopment,
                                         modifyVars,
                                         javascriptEnabled: true,
                                     },
@@ -572,13 +566,7 @@ module.exports = function(webpackEnv) {
                                 },
                                 'less-loader',
                                 {
-                                    sourceMap: isEnvProduction
-                                        ? shouldUseSourceMap
-                                        : isEnvDevelopment,
                                     lessOptions: {
-                                        sourceMap: isEnvProduction
-                                            ? shouldUseSourceMap
-                                            : isEnvDevelopment,
                                         modifyVars,
                                         javascriptEnabled: true,
                                     },
